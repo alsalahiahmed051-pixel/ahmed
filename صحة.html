@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام صحة - الإجازات المرضية</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary-color: #1a73e8;
+            --secondary-color: #34a853;
+            --accent-color: #fbbc04;
+            --light-bg: #f8f9fa;
+            --dark-text: #202124;
+            --light-text: #5f6368;
+            --border-color: #dadce0;
+            --white: #ffffff;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark-text);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* الشريط العلوي */
+        .header {
+            background-color: var(--white);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo-text {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        .logo-subtext {
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--secondary-color);
+            margin-top: -5px;
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 25px;
+            list-style: none;
+        }
+        
+        .nav-menu a {
+            text-decoration: none;
+            color: var(--light-text);
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        
+        .nav-menu a:hover, .nav-menu a.active {
+            color: var(--primary-color);
+            background-color: rgba(26, 115, 232, 0.1);
+        }
+        
+        .login-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .login-btn:hover {
+            background-color: #0d62d9;
+        }
+        
+        /* المحتوى الرئيسي */
+        .main-content {
+            flex: 1;
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+            width: 100%;
+        }
+        
+        .page-title {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            font-size: 32px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 50%;
+            transform: translateX(50%);
+            width: 100px;
+            height: 4px;
+            background-color: var(--secondary-color);
+            border-radius: 2px;
+        }
+        
+        /* بطاقة الاستعلام */
+        .inquiry-card {
+            background-color: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .service-description {
+            text-align: center;
+            color: var(--light-text);
+            margin-bottom: 25px;
+            font-size: 18px;
+            line-height: 1.8;
+        }
+        
+        .psl-number {
+            background-color: var(--light-bg);
+            border-right: 5px solid var(--accent-color);
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 8px;
+            font-weight: 600;
+            color: var(--dark-text);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .psl-label {
+            color: var(--light-text);
+            font-weight: 500;
+        }
+        
+        .form-container {
+            margin-top: 30px;
+        }
+        
+        .input-group {
+            margin-bottom: 25px;
+        }
+        
+        .input-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark-text);
+        }
+        
+        .input-field {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            flex: 1;
+            min-width: 150px;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #0d62d9;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(26, 115, 232, 0.2);
+        }
+        
+        .btn-secondary {
+            background-color: var(--light-bg);
+            color: var(--dark-text);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #e8eaed;
+            transform: translateY(-2px);
+        }
+        
+        /* نتائج الاستعلام */
+        .results-container {
+            background-color: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            padding: 30px;
+            margin-top: 40px;
+            display: none;
+        }
+        
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--light-bg);
+            padding-bottom: 15px;
+        }
+        
+        .results-title {
+            color: var(--primary-color);
+            font-size: 24px;
+        }
+        
+        .print-btn {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+        
+        .info-item {
+            padding: 15px;
+            background-color: var(--light-bg);
+            border-radius: 8px;
+        }
+        
+        .info-label {
+            color: var(--light-text);
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        
+        .info-value {
+            font-weight: 600;
+            color: var(--dark-text);
+            font-size: 18px;
+        }
+        
+        /* قسم عن صحة */
+        .about-section {
+            background-color: #e8f0fe;
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 40px;
+            border-right: 5px solid var(--primary-color);
+        }
+        
+        .about-title {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 22px;
+        }
+        
+        .about-text {
+            color: var(--light-text);
+            line-height: 1.8;
+        }
+        
+        /* الفوتر */
+        .footer {
+            background-color: var(--white);
+            border-top: 1px solid var(--border-color);
+            padding: 40px 30px 20px;
+            margin-top: 50px;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+        }
+        
+        .footer-section h3 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            text-decoration: none;
+            color: var(--light-text);
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary-color);
+        }
+        
+        .copyright {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            color: var(--light-text);
+            font-size: 14px;
+        }
+        
+        /* تفاعلية */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px;
+            }
+            
+            .nav-menu {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+            }
+            
+            .btn-group {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .psl-number {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+        }
+        
+        /* محاكاة بيانات الإجازة */
+        .sick-leave-data {
+            background-color: #f0f7ff;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 1px dashed var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <!-- الشريط العلوي -->
+    <header class="header">
+        <div class="logo-container">
+            <div>
+                <div class="logo-text">محـة</div>
+                <div class="logo-subtext">Seha</div>
+            </div>
+        </div>
+        
+        <nav>
+            <ul class="nav-menu">
+                <li><a href="#" class="active">الرئيسية</a></li>
+                <li><a href="#">الخدمات</a></li>
+                <li><a href="#">الاستعلامات</a></li>
+                <li><a href="#">الأسئلة الشائعة</a></li>
+                <li><a href="#">تواصل معنا</a></li>
+                <li><a href="#">إنشاء حساب</a></li>
+            </ul>
+        </nav>
+        
+        <button class="login-btn">
+            <i class="fas fa-sign-in-alt"></i> تسجيل الدخول
+        </button>
+    </header>
+
+    <!-- المحتوى الرئيسي -->
+    <main class="main-content">
+        <h1 class="page-title">الإجازات المرضية</h1>
+        
+        <div class="inquiry-card">
+            <p class="service-description">
+                خدمة الاستعلام عن الإجازات المرضية تتيح لك الاستعلام عن حالة طلبك للإجازة ويمكنك طباعتها عن طريق تطبيق محتجي
+            </p>
+            
+            <div class="psl-number">
+                <span class="psl-label">رقم PSL:</span>
+                <span>PSL251021143256</span>
+            </div>
+            
+            <div class="form-container">
+                <div class="input-group">
+                    <label for="id-number" class="input-label">رقم الهوية / الإقامة</label>
+                    <input type="text" id="id-number" class="input-field" placeholder="أدخل رقم الهوية أو الإقامة" value="1062708894">
+                </div>
+                
+                <div class="btn-group">
+                    <button id="inquiry-btn" class="btn btn-primary">
+                        <i class="fas fa-search"></i> استعلام
+                    </button>
+                    <button id="back-btn" class="btn btn-secondary">
+                        <i class="fas fa-arrow-right"></i> رجوع الاستعلامات
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- نتائج الاستعلام -->
+        <div id="results-container" class="results-container">
+            <div class="results-header">
+                <h2 class="results-title">تفاصيل الإجازة المرضية</h2>
+                <button id="print-btn" class="print-btn">
+                    <i class="fas fa-print"></i> طباعة التقرير
+                </button>
+            </div>
+            
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">الاسم:</div>
+                    <div class="info-value">عبد الله محمد العتيبي</div>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-label">تاريخ إصدار تقرير الإجازة:</div>
+                    <div class="info-value">2025-10-21</div>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-label">تبدأ من:</div>
+                    <div class="info-value">2025-10-21</div>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-label">وحتى:</div>
+                    <div class="info-value">2025-10-21</div>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-label">المدة بالأيام:</div>
+                    <div class="info-value">1</div>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-label">اسم الطبيب:</div>
+                    <div class="info-value">محمد أحمد القحطاني</div>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-label">المسمى الوظيفي:</div>
+                    <div class="info-value">طبيب بشري</div>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-label">المنشأة:</div>
+                    <div class="info-value">مستشفى الملك عبدالعزيز</div>
+                </div>
+            </div>
+            
+            <div class="sick-leave-data">
+                <p><strong>ملاحظة:</strong> هذه البيانات هي محاكاة للعرض فقط. البيانات الفعلية تستند إلى معلومات نظام صحة.</p>
+            </div>
+        </div>
+        
+        <!-- قسم عن صحة -->
+        <div class="about-section">
+            <h3 class="about-title">عن صحة (Seha)</h3>
+            <p class="about-text">
+                منصة صحة تهدف لربط جميع المنشآت الطبية من أجل تقديم الخدمات الصحية الإلكترونية لجميع المنشآت الطبية وتسعى إلى توحيد أنظمة المعلومات والخدمات الصحية في بوابة واحدة لضمان جودة الرعاية وخفض التكاليف.
+            </p>
+        </div>
+    </main>
+
+    <!-- الفوتر -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>الخدمات</h3>
+                <ul class="footer-links">
+                    <li><a href="#">الإجازات المرضية</a></li>
+                    <li><a href="#">الحجز في العيادات</a></li>
+                    <li><a href="#">الاستعلام عن المواعيد</a></li>
+                    <li><a href="#">الصيدليات</a></li>
+                    <li><a href="#">التقارير الطبية</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>الاستعلامات</h3>
+                <ul class="footer-links">
+                    <li><a href="#">حالة الإجازة</a></li>
+                    <li><a href="#">نتيجة الفحص</a></li>
+                    <li><a href="#">الروشتة الطبية</a></li>
+                    <li><a href="#">التأمين الصحي</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>المنشآت</h3>
+                <ul class="footer-links">
+                    <li><a href="#">المستشفيات</a></li>
+                    <li><a href="#">المراكز الصحية</a></li>
+                    <li><a href="#">المستوصفات</a></li>
+                    <li><a href="#">المختبرات</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>تواصل معنا</h3>
+                <ul class="footer-links">
+                    <li><a href="#">مركز الاتصال: 937</a></li>
+                    <li><a href="#">البريد الإلكتروني</a></li>
+                    <li><a href="#">التواصل عبر التطبيق</a></li>
+                    <li><a href="#">مقترحات وتحسينات</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            <p>جميع الحقوق محفوظة © 2025 منصة صحة (Seha) - وزارة الصحة</p>
+        </div>
+    </footer>
+
+    <script>
+        // عناصر DOM
+        const inquiryBtn = document.getElementById('inquiry-btn');
+        const backBtn = document.getElementById('back-btn');
+        const printBtn = document.getElementById('print-btn');
+        const resultsContainer = document.getElementById('results-container');
+        const idNumberInput = document.getElementById('id-number');
+        
+        // معالجة حدث الاستعلام
+        inquiryBtn.addEventListener('click', function() {
+            const idNumber = idNumberInput.value.trim();
+            
+            // التحقق من إدخال رقم الهوية
+            if (idNumber === '') {
+                alert('يرجى إدخال رقم الهوية / الإقامة');
+                idNumberInput.focus();
+                return;
+            }
+            
+            // التحقق من صحة الرقم (محاكاة)
+            if (idNumber.length < 10) {
+                alert('رقم الهوية / الإقامة يجب أن يكون 10 أرقام على الأقل');
+                return;
+            }
+            
+            // إظهار نتائج الاستعلام
+            resultsContainer.style.display = 'block';
+            
+            // التمرير إلى نتائج الاستعلام
+            resultsContainer.scrollIntoView({ behavior: 'smooth' });
+            
+            // محاكاة تحميل البيانات
+            inquiryBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الاستعلام...';
+            inquiryBtn.disabled = true;
+            
+            setTimeout(() => {
+                inquiryBtn.innerHTML = '<i class="fas fa-search"></i> استعلام';
+                inquiryBtn.disabled = false;
+                
+                // تحديث رقم PSL عشوائيًا
+                const pslNumber = document.querySelector('.psl-number span:last-child');
+                const randomNum = Math.floor(Math.random() * 10000);
+                pslNumber.textContent = `PSL25102114${randomNum.toString().padStart(4, '0')}`;
+            }, 1500);
+        });
+        
+        // معالجة حدث الرجوع
+        backBtn.addEventListener('click', function() {
+            // إخفاء نتائج الاستعلام
+            resultsContainer.style.display = 'none';
+            
+            // مسح حقل الإدخال
+            idNumberInput.value = '';
+            idNumberInput.focus();
+        });
+        
+        // معالجة حدث الطباعة
+        printBtn.addEventListener('click', function() {
+            window.print();
+        });
+        
+        // محاكاة الاستعلام عند الضغط على Enter في حقل الإدخال
+        idNumberInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                inquiryBtn.click();
+            }
+        });
+        
+        // محاكاة بيانات إجازة مرضية عند تحميل الصفحة
+        window.addEventListener('load', function() {
+            // إظهار رسالة ترحيب
+            setTimeout(() => {
+                console.log('مرحباً بك في نظام صحة للاستعلام عن الإجازات المرضية');
+            }, 500);
+        });
+    </script>
+</body>
+</html>
